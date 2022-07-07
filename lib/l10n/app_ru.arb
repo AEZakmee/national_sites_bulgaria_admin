@@ -1,0 +1,19 @@
+{
+  "welcomeLabel": "100 Национални обкта\nАдмин панел",
+  "welcomeDescription": "Необходима ви е регистряция, за да продължите",
+  "welcomeSubDescription": "Моля свържете се с IT екипа, за да ви предоставят креденшъли",
+  "emailHint": "Въведете имейл",
+  "emailLabel": "Имейл",
+  "passwordHint": "Въведете парола",
+  "passwordLabel": "Парола",
+  "emailInUse": "Въведеният имейл вече се използва",
+  "emailInvalid": "Въведеният имейл не е валиден",
+  "invalidOperation": "Невалидна операция",
+  "weakPassword": "Въведете по сложна парола",
+  "userNotFound": "Грешен имейл илии парола",
+  "emptyFields": "Моля попълнете всички полета",
+  "wrongPass": "Грешна парола",
+  "somethingWentWrong": "Нещо се обърка, опитайте пак",
+  "enterValidEmail": "Въведете валиден имейл адрес",
+  "passwordMustLong": "Паролата трябва да е поне 8 символа"
+}

@@ -1,0 +1,19 @@
+{
+  "welcomeLabel": "National Sites of Bulgaria.\nAdmin panel",
+  "welcomeDescription": "Please login to proceed",
+  "welcomeSubDescription": "Contact your supervisor, to give you credentials",
+  "emailHint": "Enter Email",
+  "emailLabel": "Email",
+  "passwordHint": "Enter Password",
+  "passwordLabel": "Password",
+  "emailInUse": "Entered Email is already in use",
+  "emailInvalid": "Entered Email is not valid",
+  "invalidOperation": "Invalid operation",
+  "weakPassword": "Entered password is too weak",
+  "userNotFound": "Wrong email or password",
+  "emptyFields": "Please enter all the required information",
+  "wrongPass": "Entered password is wrong",
+  "somethingWentWrong": "Something went wrong please try again",
+  "enterValidEmail": "Enter a valid email address",
+  "passwordMustLong": "Password should be at least 8 characters long"
+}
