@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:national_sites_bulgaria_admin/screens/auth/authentication_screen.dart';
+import '../screens/auth/authentication_screen.dart';
 import '../screens/primary/main_screen.dart';
 import '../screens/site/site_screen.dart';
 import '../screens/splash/splash_screen.dart';

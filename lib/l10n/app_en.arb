@@ -15,5 +15,8 @@
   "wrongPass": "Entered password is wrong",
   "somethingWentWrong": "Something went wrong please try again",
   "enterValidEmail": "Enter a valid email address",
-  "passwordMustLong": "Password should be at least 8 characters long"
+  "passwordMustLong": "Password should be at least 8 characters long",
+  "notAuthorizedLabel": "You are not authorized, to enter the admin panel",
+  "notAuthorizedDescription": "If you think this is a mistake, please contact the IT department",
+  "logOut": "Log out"
 }
