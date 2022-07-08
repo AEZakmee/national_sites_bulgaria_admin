@@ -15,5 +15,9 @@
   "wrongPass": "Грешна парола",
   "somethingWentWrong": "Нещо се обърка, опитайте пак",
   "enterValidEmail": "Въведете валиден имейл адрес",
-  "passwordMustLong": "Паролата трябва да е поне 8 символа"
+  "passwordMustLong": "Паролата трябва да е поне 8 символа",
+  "passwordMustLong": "Password should be at least 8 characters long",
+  "notAuthorizedLabel": "You are not authorized, to enter the admin panel",
+  "notAuthorizedDescription": "If you think this is a mistake, please contact the IT department",
+  "logOut": "Log out"
 }
