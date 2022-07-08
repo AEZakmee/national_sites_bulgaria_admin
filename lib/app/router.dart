@@ -1,22 +1,20 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import '../screens/auth/authentication_screen.dart';
+import '../screens/initial/splash_screen.dart';
 import '../screens/primary/main_screen.dart';
 import '../screens/site/site_screen.dart';
-import '../screens/splash/splash_screen.dart';
 
 class Routes {
-  static const String splash = '/';
+  static const String initial = '/';
   static const String primary = '/primary';
   static const String site = '/site-edit';
-  static const String auth = '/auth';
 }
 
 class AppRouter {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.splash:
+      case Routes.initial:
         return FluentPageRoute(
-          builder: (_) => const SplashScreen(),
+          builder: (_) => const InitialScreen(),
         );
       case Routes.primary:
         return FluentPageRoute(
@@ -25,10 +23,6 @@ class AppRouter {
       case Routes.site:
         return FluentPageRoute(
           builder: (_) => const SiteScreen(),
-        );
-      case Routes.auth:
-        return FluentPageRoute(
-          builder: (_) => const AuthenticationScreen(),
         );
       default:
         throw const FormatException('Route not found! Check routes again!');

@@ -2,11 +2,10 @@ import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/theme_provider.dart';
-import '../../../utilitiies/constants.dart';
-import '../../../widgets/locale_switcher.dart';
-import '../authentication_viewmodel.dart';
-import 'arrow_button.dart';
+import '../../../../providers/theme_provider.dart';
+import '../../../../widgets/locale_switcher.dart';
+import '../../widgets/arrow_button.dart';
+import '../login_viewmodel.dart';
 import 'input_fields.dart';
 
 class Body extends StatelessWidget {
@@ -18,65 +17,60 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) => Consumer<AuthVM>(
         builder: (context, prov, child) => Stack(
           children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: Container(
-                height: 300,
+            Positioned.fill(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
-                  gradient: kSplashScreenGradient(context),
+                  color: FluentTheme.of(context).micaBackgroundColor,
                 ),
-              ),
-            ),
-            Positioned(
-              right: MediaQuery.of(context).size.width / 4,
-              left: MediaQuery.of(context).size.width / 4,
-              top: 150,
-              child: Stack(
-                children: [
-                  const ArrowButtonBackground(
-                    hasShadow: true,
-                  ),
-                  Column(
+                child: Center(
+                  child: Stack(
                     children: [
-                      Card(
-                        elevation: 16,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                          ),
-                          child: Column(
-                            children: [
-                              const InputFields(),
-                              if (prov.hasAuthError)
-                                Center(
-                                  child: Text(
-                                    prov.authErrorString(context),
-                                    style: FluentTheme.of(context)
-                                        .typography
-                                        .caption,
-                                  ),
-                                ),
-                              const SizedBox(
-                                height: 55,
-                              ),
-                            ],
-                          ),
-                        ),
+                      const ArrowButtonBackground(
+                        hasShadow: true,
                       ),
-                      const SizedBox(
-                        height: 55,
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Card(
+                            elevation: 16,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const InputFields(),
+                                  if (prov.hasAuthError)
+                                    Center(
+                                      child: Text(
+                                        prov.authErrorString(context),
+                                        style: FluentTheme.of(context)
+                                            .typography
+                                            .caption,
+                                      ),
+                                    ),
+                                  const SizedBox(
+                                    height: 55,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 55,
+                          ),
+                        ],
+                      ),
+                      ArrowButtonBackground(
+                        child: ArrowButton(
+                          onPress: () => context.read<AuthVM>().signUp(context),
+                          isLoading: context.watch<AuthVM>().isLoading,
+                        ),
                       ),
                     ],
                   ),
-                  ArrowButtonBackground(
-                    child: ArrowButton(
-                      onPress: () => context.read<AuthVM>().signUp(context),
-                      isLoading: context.watch<AuthVM>().isLoading,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             Align(
@@ -107,7 +101,7 @@ class Body extends StatelessWidget {
               alignment: Alignment.topRight,
               child: SafeArea(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 15, top: 15),
+                  padding: EdgeInsets.only(top: 30),
                   child: CustomDayNightSwitcher(),
                 ),
               ),

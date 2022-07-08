@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: themeProvider.lightTheme(),
       darkTheme: themeProvider.darkTheme(),
       themeMode: themeProvider.themeMode,
-      initialRoute: Routes.splash,
+      initialRoute: Routes.initial,
       onGenerateRoute: AppRouter.generateRoute,
       localizationsDelegates: const [
         AppLocalizations.delegate,

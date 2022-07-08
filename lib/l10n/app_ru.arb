@@ -1,6 +1,6 @@
 {
-  "welcomeLabel": "100 Национални обкта\nАдмин панел",
-  "welcomeDescription": "Необходима ви е регистряция, за да продължите",
+  "welcomeLabel": "Национални обекти\nАдмин панел",
+  "welcomeDescription": "Необходима ви е регистряция, за да влезете",
   "welcomeSubDescription": "Моля свържете се с IT екипа, за да ви предоставят креденшъли",
   "emailHint": "Въведете имейл",
   "emailLabel": "Имейл",
@@ -16,7 +16,6 @@
   "somethingWentWrong": "Нещо се обърка, опитайте пак",
   "enterValidEmail": "Въведете валиден имейл адрес",
   "passwordMustLong": "Паролата трябва да е поне 8 символа",
-  "passwordMustLong": "Password should be at least 8 characters long",
   "notAuthorizedLabel": "You are not authorized, to enter the admin panel",
   "notAuthorizedDescription": "If you think this is a mistake, please contact the IT department",
   "logOut": "Log out"
