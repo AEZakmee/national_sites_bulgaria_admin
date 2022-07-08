@@ -1,0 +1,24 @@
+{
+  "name": "CustomIcons",
+  "css_prefix_text": "",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "eacecfd21fe98e5937856f2721be25b9",
+      "css": "edit",
+      "code": 59393,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M723.6 9.8C710.6-3.3 689.4-3.3 676.4 9.8L0 686.2V966.7C0 985.1 14.9 1000 33.3 1000H313.8L990.2 323.6C1003.3 310.6 1003.3 289.4 990.2 276.4L723.6 9.8Z",
+        "width": 1000
+      },
+      "search": [
+        "edit"
+      ]
+    }
+  ]
+}

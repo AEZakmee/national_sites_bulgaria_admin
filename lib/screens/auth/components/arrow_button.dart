@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:national_sites_bulgaria_admin/utilitiies/custom_icons_icons.dart';
 
 import '../../../utilitiies/constants.dart';
 
@@ -61,11 +62,9 @@ class ArrowButton extends StatelessWidget {
                   color: FluentTheme.of(context).accentColor,
                   size: 40,
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SpinKitFadingCircle(
-                    color: FluentTheme.of(context).accentColor,
-                  ),
+              : const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ProgressRing(),
                 ),
         ),
       );

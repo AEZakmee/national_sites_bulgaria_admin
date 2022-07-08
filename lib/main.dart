@@ -4,19 +4,20 @@ import 'package:firedart/auth/token_store.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:national_sites_bulgaria_admin/services/localization_service.dart';
 
 import 'app/app.dart';
 import 'app/locator.dart';
 import 'app/providers.dart';
+import 'services/localization_service.dart';
 import 'services/theme_service.dart';
+import 'utilitiies/token_sotrage.dart';
 
 Future<void> initApp() async {
-  await dotenv.load(fileName: '.env');
+  await dotenv.load();
 
   await DesktopWindow.setMinWindowSize(const Size(800, 600));
 
-  FirebaseAuth.initialize(dotenv.get('API_KEY'), VolatileStore());
+  FirebaseAuth.initialize(dotenv.get('API_KEY'), await HiveStore.create());
   Firestore.initialize(dotenv.get('PROJECT_ID'));
 
   setup();

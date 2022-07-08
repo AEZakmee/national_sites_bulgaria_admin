@@ -10,6 +10,6 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ViewModelBuilder<SplashViewModel>(
         viewModelBuilder: SplashViewModel.new,
-        builder: (context, viewModel) => const SplashScreenAnimation(),
+        builder: (context) => const SplashScreenAnimation(),
       );
 }
