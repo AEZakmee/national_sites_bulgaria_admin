@@ -11,6 +11,6 @@ class PrimaryScreen extends StatelessWidget {
   Widget build(BuildContext context) => ViewModelBuilder<PrimaryViewModel>(
         viewModelBuilder: PrimaryViewModel.new,
         onModelReady: (viewModel) => viewModel.init(),
-        builder: (context, viewModel) => const Body(),
+        builder: (context) => const Body(),
       );
 }

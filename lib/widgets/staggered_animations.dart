@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+int handleNumber(BuildContext context) {
+  final size = MediaQuery.of(context).size.width;
+  if (size < 1100) {
+    return 2;
+  }
+  if (size < 1400) {
+    return 3;
+  }
+  if (size < 1700) {
+    return 4;
+  }
+  return 5;
+}
+
 class StaggeredListView extends StatelessWidget {
   final int count;
   final Function child;
@@ -37,12 +51,12 @@ class StaggeredListView extends StatelessWidget {
       );
 }
 
-class StaggeredGridView extends StatelessWidget {
+class SitesGridView extends StatelessWidget {
   final int count;
   final Function child;
   final bool shrinkWrap;
   final ScrollPhysics? scrollPhysics;
-  const StaggeredGridView({
+  const SitesGridView({
     required this.count,
     required this.child,
     Key? key,
@@ -52,8 +66,9 @@ class StaggeredGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AnimationLimiter(
         child: GridView.count(
-          crossAxisCount: 3,
+          crossAxisCount: handleNumber(context),
           shrinkWrap: shrinkWrap,
+          childAspectRatio: 16 / 12,
           physics: scrollPhysics,
           children: List.generate(
             count,

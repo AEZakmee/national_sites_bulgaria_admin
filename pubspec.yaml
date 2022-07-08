@@ -27,6 +27,7 @@ dependencies:
   json_annotation: ^4.4.0
   lottie: ^1.2.2
   desktop_window: ^0.4.0
+  fluttericon: ^2.0.0
 
   firedart: ^0.9.0+1
   http: ^0.13.4
@@ -45,4 +46,10 @@ flutter:
   assets:
     - assets/
     - assets/lottie/
+    - fonts/
     - .env
+
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: fonts/CustomIcons.ttf

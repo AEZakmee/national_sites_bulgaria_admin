@@ -10,7 +10,7 @@ class ViewModelBuilder<T extends ChangeNotifier> extends StatefulWidget {
     this.onDispose,
   }) : super(key: key);
 
-  final Widget Function(BuildContext context, T model) builder;
+  final Widget Function(BuildContext context) builder;
 
   final Function(T model)? onModelReady;
 
@@ -48,7 +48,6 @@ class _ViewModelBuilderState<T extends ChangeNotifier>
         create: (context) => _viewModel!,
         child: widget.builder(
           context,
-          _viewModel!,
         ),
       );
 }
