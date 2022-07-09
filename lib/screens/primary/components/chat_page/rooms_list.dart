@@ -14,8 +14,8 @@ class RoomsList extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<List<ChatRoom>>(
-        stream: context.read<ChatPageVM>().rooms,
+  Widget build(BuildContext context) => FutureBuilder<List<ChatRoom>>(
+        future: context.read<ChatPageVM>().rooms,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const LoadingIndicator();

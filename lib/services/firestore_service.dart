@@ -34,11 +34,6 @@ class FirestoreService {
       .stream
       .map((event) => AppUser.fromJson(event!.map));
 
-  Stream<List<Site>> sitesStream() => _db
-      .collection('sites')
-      .stream
-      .map((doc) => doc.map((e) => Site.fromJson(e.map)).toList());
-
   Future<List<Site>> fetchSites() async {
     final docs = await _db.collection('sites').get();
     return docs.map((e) => Site.fromJson(e.map)).toList();
@@ -56,17 +51,19 @@ class FirestoreService {
       .get()
       .then((value) => ChatRoom.fromJson(value.map));
 
-  Stream<List<ChatRoom>> roomsStream() => _db
-      .collection('rooms')
-      .stream
-      .map((doc) => doc.map((e) => ChatRoom.fromJson(e.map)).toList());
+  Future<List<ChatRoom>> fetchRooms() async {
+    final docs = await _db.collection('rooms').get();
+    return docs.map((e) => ChatRoom.fromJson(e.map)).toList();
+  }
 
-  Stream<List<ChatMessage>> messagesStream(String siteId) => _db
-      .collection('rooms')
-      .document(siteId)
-      .collection('messages')
-      .stream
-      .map((doc) => doc.map((e) => ChatMessage.fromJson(e.map)).toList());
+  Future<List<ChatMessage>> fetchMessages(String siteId) async {
+    final docs = await _db
+        .collection('rooms')
+        .document(siteId)
+        .collection('messages')
+        .get();
+    return docs.map((e) => ChatMessage.fromJson(e.map)).toList();
+  }
 
   Future<String?> uploadImage({
     required Uint8List imageBytes,

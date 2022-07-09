@@ -12,26 +12,20 @@ class ChatPageVM extends ChangeNotifier {
   final _firebase = locator<FirestoreService>();
   final _dataRepo = locator<DataRepo>();
 
+  ValueKey animationKey = const ValueKey(1);
+
   ChatRoom? selectedRoom;
 
-  bool initialLoad = true;
-
-  Stream<List<ChatRoom>> get rooms => _firebase.roomsStream();
+  List<ChatMessage> messages = [];
 
   Future<void> loadRoom(String id) async {
-    initialLoad = false;
-    selectedRoom = null;
-    chatUsers = {};
-    notifyListeners();
-
     selectedRoom = await _firebase.fetchRoom(id);
+    messages = await _firebase.fetchMessages(id);
+    animationKey = ValueKey(DateTime.now().millisecondsSinceEpoch);
     notifyListeners();
   }
 
-  Stream<List<ChatMessage>> get messages {
-    assert(selectedRoom != null);
-    return _firebase.messagesStream(selectedRoom!.siteId);
-  }
+  Future<List<ChatRoom>> get rooms => _firebase.fetchRooms();
 
   Map<String, AppUser> chatUsers = {};
 
