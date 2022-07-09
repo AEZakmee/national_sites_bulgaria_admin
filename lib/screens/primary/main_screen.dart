@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../widgets/viewmodel_builder.dart';
+import 'components/body.dart';
 import 'main_viewmodel.dart';
-import 'widgets/body.dart';
 
 class PrimaryScreen extends StatelessWidget {
   const PrimaryScreen({Key? key}) : super(key: key);

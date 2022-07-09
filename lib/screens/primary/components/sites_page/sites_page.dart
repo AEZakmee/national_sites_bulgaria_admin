@@ -10,8 +10,6 @@ class SitesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ViewModelBuilder<SitesPageVM>(
         viewModelBuilder: SitesPageVM.new,
-        builder: (context) => const ScaffoldPage(
-          content: SitesBody(),
-        ),
+        builder: (context) => const SitesBody(),
       );
 }
