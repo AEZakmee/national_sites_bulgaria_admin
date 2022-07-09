@@ -15,27 +15,27 @@ class SitesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = context.watch<SitesPageVM>().sites;
-    return SizedBox.expand(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: context.watch<SitesPageVM>().loading
-            ? const LoadingIndicator()
-            : SitesGridView(
-                count: data.length,
-                child: (index) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SiteCard(
-                    imageUrl: data[index].images.first.url,
-                    imageHash: data[index].images.first.hash,
-                    title: data[index].info.name,
-                    onTap: () => context.read<SitesPageVM>().goToSiteEditPage(
-                          context,
-                          data[index].uid,
-                        ),
-                  ),
-                ),
+    return context.watch<SitesPageVM>().loading
+        ? const SizedBox(
+            width: double.infinity,
+            child: Center(
+              child: LoadingIndicator(),
+            ),
+          )
+        : SitesGridView(
+            count: data.length,
+            child: (index) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SiteCard(
+                imageUrl: data[index].images.first.url,
+                imageHash: data[index].images.first.hash,
+                title: data[index].info.name,
+                onTap: () => context.read<SitesPageVM>().goToSiteEditPage(
+                      context,
+                      data[index].uid,
+                    ),
               ),
-      ),
-    );
+            ),
+          );
   }
 }

@@ -21,7 +21,7 @@ class _DrillInAnimatedSwitcherState extends State<DrillInAnimatedSwitcher>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 100),
       vsync: this,
     )..forward();
 
@@ -30,13 +30,16 @@ class _DrillInAnimatedSwitcherState extends State<DrillInAnimatedSwitcher>
       begin: 0,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeIn,
+      curve: Curves.easeInOut,
     ));
   }
 
   @override
-  Widget build(BuildContext context) => FadeTransition(
-        opacity: _animation,
-        child: widget.child,
+  Widget build(BuildContext context) => DrillInPageTransition(
+        animation: _animation,
+        child: FadeTransition(
+          opacity: _animation,
+          child: widget.child,
+        ),
       );
 }

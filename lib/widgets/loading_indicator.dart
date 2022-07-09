@@ -32,13 +32,11 @@ class LoadingIndicator extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      width: 200,
-      child: Lottie.asset(
-        _getFile(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SizedBox(
+        height: 200,
+        width: 200,
+        child: Lottie.asset(
+          _getFile(),
+        ),
+      );
 }
