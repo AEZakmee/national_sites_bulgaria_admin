@@ -16,11 +16,12 @@ class ChatPageVM extends ChangeNotifier {
 
   ChatRoom? selectedRoom;
 
-  List<ChatMessage> messages = [];
+  List<ChatMessage> _messages = [];
+  List<ChatMessage> get messages => _messages.reversed.toList();
 
   Future<void> loadRoom(String id) async {
     selectedRoom = await _firebase.fetchRoom(id);
-    messages = await _firebase.fetchMessages(id);
+    _messages = await _firebase.fetchMessages(id);
     animationKey = ValueKey(DateTime.now().millisecondsSinceEpoch);
     notifyListeners();
   }
