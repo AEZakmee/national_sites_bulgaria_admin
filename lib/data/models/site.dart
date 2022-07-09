@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'site.g.dart';
 
@@ -22,6 +23,15 @@ class Site {
 
   factory Site.fromJson(Map<String, dynamic> json) => _$SiteFromJson(json);
   Map<String, dynamic> toJson() => _$SiteToJson(this);
+
+  factory Site.empty() => Site(
+        Coordinates(0, 0),
+        [],
+        Info('', '', ''),
+        Rating(0, 0),
+        '',
+        const Uuid().v4(),
+      );
 }
 
 @JsonSerializable()

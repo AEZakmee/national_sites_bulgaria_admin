@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/gestures.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import '../../../../widgets/cached_image.dart';
 

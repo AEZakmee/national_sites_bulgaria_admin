@@ -21,8 +21,11 @@ class AppRouter {
           builder: (_) => const PrimaryScreen(),
         );
       case Routes.site:
+        final args = settings.arguments as SiteScreenArguments?;
         return FluentPageRoute(
-          builder: (_) => const SiteScreen(),
+          builder: (_) => SiteScreen(
+            args: args,
+          ),
         );
       default:
         throw const FormatException('Route not found! Check routes again!');
