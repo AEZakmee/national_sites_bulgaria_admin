@@ -6,9 +6,14 @@ part 'app_user.g.dart';
 class AppUser {
   bool admin;
   String? uniqueID;
+  @JsonKey(defaultValue: '')
+  String username;
+  String? picture;
 
   AppUser({
     required this.uniqueID,
+    this.username = '',
+    this.picture,
     this.admin = false,
   });
 

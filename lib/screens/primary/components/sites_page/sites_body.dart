@@ -16,7 +16,7 @@ class SitesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox.expand(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.all(8),
           child: StreamBuilder<List<Site>>(
             stream: context.watch<SitesPageVM>().sites,
             builder: (context, snapshot) {

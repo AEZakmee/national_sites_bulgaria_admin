@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../main_viewmodel.dart';
+import 'chat_page/chat_page.dart';
 import 'sites_page/sites_page.dart';
 
 class Body extends StatelessWidget {
@@ -18,9 +19,13 @@ class Body extends StatelessWidget {
             content: NavigationBody(
               index: viewModel.index,
               children: [
-                const SitesPage(),
-                ScaffoldPage(
-                  content: Text('Kur2'),
+                const ScaffoldPage(
+                  padding: EdgeInsets.zero,
+                  content: SitesPage(),
+                ),
+                const ScaffoldPage(
+                  padding: EdgeInsets.zero,
+                  content: ChatPage(),
                 ),
                 ScaffoldPage(
                   content: Text('Kur3'),
@@ -50,7 +55,7 @@ class Body extends StatelessWidget {
                 ),
                 PaneItem(
                   icon: const Icon(FluentIcons.user_clapper),
-                  title: const Text('Kur2'),
+                  title: const Text('Messages'),
                 ),
                 PaneItem(
                   icon: const Icon(FluentIcons.chat),

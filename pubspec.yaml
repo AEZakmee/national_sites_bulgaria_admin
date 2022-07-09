@@ -1,6 +1,8 @@
 name: national_sites_bulgaria_admin
 description: Web panel for national sites in bulgaria - admin panel
 
+publish_to: none
+
 version: 1.0.0+1
 
 environment:
@@ -33,6 +35,7 @@ dependencies:
   uuid: 3.0.6
   firedart: ^0.9.0+1
   http: ^0.13.4
+  timeago: ^3.2.2
 
 dev_dependencies:
   flutter_test:
