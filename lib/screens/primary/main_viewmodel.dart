@@ -25,7 +25,7 @@ class PrimaryViewModel extends ChangeNotifier {
 
   void logout(BuildContext context) {
     _auth.signOut();
-    Navigator.of(context).pushReplacementNamed(Routes.auth);
+    Navigator.of(context).pushReplacementNamed(Routes.initial);
   }
 
   int index = 0;

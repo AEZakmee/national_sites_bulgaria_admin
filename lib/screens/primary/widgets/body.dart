@@ -69,26 +69,30 @@ class UnauthorizedWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.notAuthorizedLabel,
-              style: FluentTheme.of(context).typography.title,
-            ),
-            Text(
-              AppLocalizations.of(context)!.notAuthorizedDescription,
-              style: FluentTheme.of(context).typography.body,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextButton(
-              onPressed: () => context.read<PrimaryViewModel>().logout(context),
-              child: Text(AppLocalizations.of(context)!.logOut),
-            ),
-          ],
+  Widget build(BuildContext context) => Container(
+        color: FluentTheme.of(context).micaBackgroundColor,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.notAuthorizedLabel,
+                style: FluentTheme.of(context).typography.title,
+              ),
+              Text(
+                AppLocalizations.of(context)!.notAuthorizedDescription,
+                style: FluentTheme.of(context).typography.body,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              TextButton(
+                onPressed: () =>
+                    context.read<PrimaryViewModel>().logout(context),
+                child: Text(AppLocalizations.of(context)!.logOut),
+              ),
+            ],
+          ),
         ),
       );
 }

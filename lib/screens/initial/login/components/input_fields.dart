@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../authentication_viewmodel.dart';
+import '../login_viewmodel.dart';
 
 class InputFields extends StatefulWidget {
   const InputFields({Key? key}) : super(key: key);

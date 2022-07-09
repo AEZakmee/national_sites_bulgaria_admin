@@ -5,9 +5,9 @@ import 'package:firedart/auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../app/locator.dart';
-import '../../app/router.dart';
-import '../../data/repos/data_repo.dart';
+import '../../../app/locator.dart';
+import '../../../app/router.dart';
+import '../../../data/repos/data_repo.dart';
 
 final RegExp regExpEmail = RegExp(
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');

@@ -5,10 +5,12 @@ import '../../app/locator.dart';
 import '../../app/router.dart';
 import '../../data/repos/data_repo.dart';
 
-class SplashViewModel extends ChangeNotifier {
+class InitialViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DataRepo _dataRepo = locator<DataRepo>();
   bool userIsLogged = false;
+
+  bool showLogin = false;
 
   Future checkUser(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 1, milliseconds: 500));
@@ -23,6 +25,7 @@ class SplashViewModel extends ChangeNotifier {
   }
 
   void goToAuthenticationScreen(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(Routes.auth);
+    showLogin = true;
+    notifyListeners();
   }
 }
