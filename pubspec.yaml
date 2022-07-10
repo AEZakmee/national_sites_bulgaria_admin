@@ -38,7 +38,6 @@ dependencies:
   timeago: ^3.2.2
   file_picker: ^4.6.1
   image_compression: ^1.0.3
-  dio: any
   desktop_drop: ^0.3.3
   blurhash_dart:
     git:

@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:firedart/auth/firebase_auth.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 import '../data/models/app_user.dart';
 import '../data/models/chat_room.dart';
@@ -78,19 +78,12 @@ class FirestoreService {
     final storageUrl = '$googleStorageApi$projectPath$imageRef';
 
     try {
-      final response = await Dio(
-        BaseOptions(
-          headers: <String, String>{
-            'Content-Type': 'image/jpeg',
-            'Content-Length': imageBytes.length.toString(),
-          },
-        ),
-      ).post(
-        storageUrl,
-        data: jsonEncode(imageBytes),
+      final response = await http.post(
+        Uri.parse(storageUrl),
+        body: imageBytes,
       );
 
-      final downloadToken = response.data['downloadTokens'];
+      final downloadToken = jsonDecode(response.body)['downloadTokens'];
 
       if (downloadToken != null && downloadToken.toString().isNotEmpty) {
         return '$storageUrl?alt=media&token=$downloadToken';
