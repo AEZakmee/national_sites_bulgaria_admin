@@ -1,6 +1,5 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/models/site.dart';
@@ -64,15 +63,6 @@ class SiteBody extends StatelessWidget {
                                 child: SiteInformation(),
                               ),
                               const FluentHorizontalSeparator(),
-                              Text(
-                                'Site photos',
-                                style: FluentTheme.of(context)
-                                    .typography
-                                    .bodyLarge,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
                               const Expanded(
                                 child: SitePhotos(),
                               ),
@@ -107,16 +97,29 @@ class SitePhotos extends StatelessWidget {
           children: [
             Expanded(
               flex: 2,
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                children: List.generate(
-                  viewModel.site.images.length,
-                  (index) => GridImage(
-                    image: viewModel.site.images[index],
+              child: Column(
+                children: [
+                  Text(
+                    'Site photos',
+                    style: FluentTheme.of(context).typography.bodyLarge,
                   ),
-                ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      children: List.generate(
+                        viewModel.site.images.length,
+                        (index) => GridImage(
+                          image: viewModel.site.images[index],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
@@ -176,8 +179,8 @@ class _FileDropTargetState extends State<FileDropTarget> {
       },
       child: Container(
         color: dragEntered
-            ? theme.scaffoldBackgroundColor
-            : theme.micaBackgroundColor,
+            ? theme.micaBackgroundColor
+            : theme.scaffoldBackgroundColor,
         child: Center(
           child: context.select<SiteScreenVM, bool>(
                   (viewModel) => viewModel.imageUploading)
@@ -227,7 +230,7 @@ class GridImage extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 margin: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: FluentTheme.of(context).micaBackgroundColor,
+                  color: FluentTheme.of(context).acrylicBackgroundColor,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(

@@ -8,7 +8,7 @@ class FluentVerticalSeparator extends StatelessWidget {
         margin: const EdgeInsets.all(20),
         height: double.infinity,
         width: 1,
-        color: FluentTheme.of(context).scaffoldBackgroundColor,
+        color: FluentTheme.of(context).micaBackgroundColor,
       );
 }
 
@@ -20,6 +20,6 @@ class FluentHorizontalSeparator extends StatelessWidget {
         margin: const EdgeInsets.all(20),
         height: 1,
         width: double.infinity,
-        color: FluentTheme.of(context).scaffoldBackgroundColor,
+        color: FluentTheme.of(context).micaBackgroundColor,
       );
 }

@@ -103,7 +103,9 @@ class _SendByCurrentUser extends StatelessWidget {
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
                       message.message,
-                      style: theme.typography.body,
+                      style: theme.typography.body!.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

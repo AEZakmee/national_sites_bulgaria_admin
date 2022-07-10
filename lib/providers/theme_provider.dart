@@ -30,6 +30,13 @@ class ThemeProvider extends ChangeNotifier {
   ThemeData darkTheme() => ThemeData(
         brightness: Brightness.dark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        micaBackgroundColor: Colors.grey.withOpacity(0.6),
+        scaffoldBackgroundColor: Colors.black.withOpacity(0.2),
+        acrylicBackgroundColor: Colors.black.withOpacity(0.5),
+        inactiveBackgroundColor: Colors.black.withOpacity(0.7),
+        focusTheme: const FocusThemeData(
+          glowFactor: 4.0,
+        ),
       );
 
   ThemeMode get themeMode => isDarkTheme ? ThemeMode.dark : ThemeMode.light;

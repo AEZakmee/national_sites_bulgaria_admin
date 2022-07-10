@@ -34,6 +34,9 @@ class SitesBody extends StatelessWidget {
                       context,
                       data[index].uid,
                     ),
+                onDeleteTap: () => context.read<SitesPageVM>().delete(
+                      data[index].uid,
+                    ),
               ),
             ),
           );

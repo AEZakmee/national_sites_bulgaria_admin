@@ -68,7 +68,6 @@ class SitesGridView extends StatelessWidget {
         child: GridView.count(
           crossAxisCount: handleNumber(context),
           shrinkWrap: shrinkWrap,
-          childAspectRatio: 16 / 12,
           physics: scrollPhysics,
           children: List.generate(
             count,

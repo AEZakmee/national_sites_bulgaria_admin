@@ -52,7 +52,7 @@ class RoomCard extends StatelessWidget {
 
           if (state.contains(ButtonStates.hovering) ||
               (selectedRoomId != null && selectedRoomId == room.siteId)) {
-            backgroundCardColor = theme.scaffoldBackgroundColor;
+            backgroundCardColor = theme.micaBackgroundColor;
           }
 
           return Column(
@@ -125,7 +125,7 @@ class RoomCard extends StatelessWidget {
               ),
               Container(
                 height: 1,
-                color: theme.scaffoldBackgroundColor,
+                color: theme.micaBackgroundColor,
               ),
             ],
           );

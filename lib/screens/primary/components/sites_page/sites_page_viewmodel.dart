@@ -16,6 +16,8 @@ class SitesPageVM extends ChangeNotifier {
     );
   }
 
+  Future<void> delete(String id) async {}
+
   bool loading = false;
 
   List<Site> get sites => _dataRepo.sites;
