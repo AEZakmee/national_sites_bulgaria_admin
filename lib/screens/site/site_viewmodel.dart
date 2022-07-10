@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:blurhash_dart/blurhash_dart.dart';
@@ -12,6 +13,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 import '../../app/locator.dart';
 import '../../data/models/site.dart';
 import '../../services/firestore_service.dart';
+import '../../utilitiies/blur_hash_isolate.dart';
 import 'site_screen.dart';
 
 class SiteScreenVM extends ChangeNotifier {
@@ -79,10 +81,13 @@ class SiteScreenVM extends ChangeNotifier {
   }
 
   Future<void> dragFiles(DropDoneDetails detail) async {
-    await uploadImage(
-      await detail.files.first.readAsBytes(),
-      detail.files.first.path,
-    );
+    final files = detail.files;
+    for (final element in files) {
+      await uploadImage(
+        await element.readAsBytes(),
+        element.path,
+      );
+    }
   }
 
   Future<void> uploadImage(Uint8List data, String filePath) async {
@@ -110,11 +115,16 @@ class SiteScreenVM extends ChangeNotifier {
         throw Exception('Image upload failed');
       }
 
-      final image = img.decodeImage(bytes.toList());
-      final blurHash = BlurHash.encode(image!);
+      final ReceivePort port = ReceivePort();
+      final isolate = await Isolate.spawn<List<dynamic>>(
+        calculateBlurHash,
+        [port.sendPort, bytes],
+      );
+      final hash = await port.first as String;
+      isolate.kill(priority: Isolate.immediate);
 
       site.images.add(
-        SiteImage(blurHash.hash, url),
+        SiteImage(hash, url),
       );
     } on Exception catch (e) {
       log(e.toString());

@@ -1,9 +1,11 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/models/site.dart';
 import '../../../widgets/cached_image.dart';
+import '../../../widgets/loading_indicator.dart';
 import '../../../widgets/vertical_separator.dart';
 import '../site_viewmodel.dart';
 
@@ -123,15 +125,8 @@ class SitePhotos extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  Expanded(
-                    child: DropTarget(
-                      onDragDone: viewModel.dragFiles,
-                      onDragEntered: (detail) {},
-                      onDragExited: (detail) {},
-                      child: const Center(
-                        child: Text('Drop here'),
-                      ),
-                    ),
+                  const Expanded(
+                    child: FileDropTarget(),
                   ),
                   const SizedBox(
                     height: 10,
@@ -149,6 +144,63 @@ class SitePhotos extends StatelessWidget {
           ],
         ),
       );
+}
+
+class FileDropTarget extends StatefulWidget {
+  const FileDropTarget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<FileDropTarget> createState() => _FileDropTargetState();
+}
+
+class _FileDropTargetState extends State<FileDropTarget> {
+  bool dragEntered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.read<SiteScreenVM>();
+    final theme = FluentTheme.of(context);
+    return DropTarget(
+      onDragDone: viewModel.dragFiles,
+      onDragEntered: (detail) {
+        setState(() {
+          dragEntered = true;
+        });
+      },
+      onDragExited: (detail) {
+        setState(() {
+          dragEntered = false;
+        });
+      },
+      child: Container(
+        color: dragEntered
+            ? theme.scaffoldBackgroundColor
+            : theme.micaBackgroundColor,
+        child: Center(
+          child: context.select<SiteScreenVM, bool>(
+                  (viewModel) => viewModel.imageUploading)
+              ? const LoadingIndicator(
+                  loadingType: LoadingType.cloudTransfer,
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(
+                      FluentIcons.file_image,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Drop here'),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
 }
 
 class GridImage extends StatelessWidget {
@@ -195,44 +247,50 @@ class SiteInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.read<SiteScreenVM>();
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: Column(
-            children: [
-              TextFormBox(
-                controller: viewModel.numbController,
-                header: 'Number',
-                placeholder: 'Enter site number',
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Provide site number';
-                  }
-                  return null;
-                },
+          child: SingleChildScrollView(
+            controller: ScrollController(),
+            child: Scrollbar(
+              child: Column(
+                children: [
+                  TextFormBox(
+                    controller: viewModel.numbController,
+                    header: 'Number',
+                    placeholder: 'Enter site number',
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide site number';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormBox(
+                    controller: viewModel.nameController,
+                    header: 'Name',
+                    placeholder: 'Enter site name',
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide site name';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormBox(
+                    controller: viewModel.townController,
+                    header: 'Town',
+                    placeholder: 'Enter site location',
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide site location';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
               ),
-              TextFormBox(
-                controller: viewModel.nameController,
-                header: 'Name',
-                placeholder: 'Enter site name',
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Provide site name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormBox(
-                controller: viewModel.townController,
-                header: 'Town',
-                placeholder: 'Enter site location',
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Provide site location';
-                  }
-                  return null;
-                },
-              ),
-            ],
+            ),
           ),
         ),
         const SizedBox(width: 20),
