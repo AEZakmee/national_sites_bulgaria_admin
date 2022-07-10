@@ -9,7 +9,7 @@ part of 'site.dart';
 Site _$SiteFromJson(Map<String, dynamic> json) => Site(
       Coordinates.fromJson(json['coordinates'] as Map<String, dynamic>),
       (json['images'] as List<dynamic>)
-          .map((e) => Image.fromJson(e as Map<String, dynamic>))
+          .map((e) => SiteImage.fromJson(e as Map<String, dynamic>))
           .toList(),
       Info.fromJson(json['info'] as Map<String, dynamic>),
       Rating.fromJson(json['rating'] as Map<String, dynamic>),
@@ -37,12 +37,12 @@ Map<String, dynamic> _$CoordinatesToJson(Coordinates instance) =>
       'lng': instance.lng,
     };
 
-Image _$ImageFromJson(Map<String, dynamic> json) => Image(
+SiteImage _$SiteImageFromJson(Map<String, dynamic> json) => SiteImage(
       json['hash'] as String,
       json['url'] as String,
     );
 
-Map<String, dynamic> _$ImageToJson(Image instance) => <String, dynamic>{
+Map<String, dynamic> _$SiteImageToJson(SiteImage instance) => <String, dynamic>{
       'hash': instance.hash,
       'url': instance.url,
     };

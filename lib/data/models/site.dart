@@ -6,7 +6,7 @@ part 'site.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Site {
   Coordinates coordinates;
-  List<Image> images;
+  List<SiteImage> images;
   Info info;
   Rating rating;
   String siteNumber;
@@ -50,17 +50,18 @@ class Coordinates {
 }
 
 @JsonSerializable()
-class Image {
+class SiteImage {
   String hash;
   String url;
 
-  Image(
+  SiteImage(
     this.hash,
     this.url,
   );
 
-  factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
-  Map<String, dynamic> toJson() => _$ImageToJson(this);
+  factory SiteImage.fromJson(Map<String, dynamic> json) =>
+      _$SiteImageFromJson(json);
+  Map<String, dynamic> toJson() => _$SiteImageToJson(this);
 }
 
 @JsonSerializable()

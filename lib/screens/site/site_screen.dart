@@ -21,6 +21,6 @@ class SiteScreen extends StatelessWidget {
         viewModelBuilder: () => SiteScreenVM(args),
         onModelReady: (vm) => vm.init(),
         onDispose: (vm) => vm.onDispose(),
-        builder: (context) => const Body(),
+        builder: (context) => const SiteBody(),
       );
 }

@@ -1,4 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:blurhash_dart/blurhash_dart.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_compression/image_compression.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 
 import '../../app/locator.dart';
 import '../../data/models/site.dart';
@@ -8,8 +17,15 @@ import 'site_screen.dart';
 class SiteScreenVM extends ChangeNotifier {
   final _firestore = locator<FirestoreService>();
 
+  final formKey = GlobalKey<FormState>();
+
   final SiteScreenArguments? args;
   SiteScreenVM(this.args);
+
+  final numbController = TextEditingController();
+  final nameController = TextEditingController();
+  final townController = TextEditingController();
+  final descController = TextEditingController();
 
   late Site site;
 
@@ -29,6 +45,10 @@ class SiteScreenVM extends ChangeNotifier {
 
   Future<void> loadExistingSite(String id) async {
     site = await _firestore.fetchSite(id);
+    numbController.text = site.siteNumber;
+    nameController.text = site.info.name;
+    townController.text = site.info.town;
+    descController.text = site.info.description;
   }
 
   void loadEmptySide() {
@@ -39,5 +59,73 @@ class SiteScreenVM extends ChangeNotifier {
 
   void goBack(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  Future<void> createSite() async {
+    formKey.currentState!.validate();
+  }
+
+  bool imageUploading = false;
+
+  Future<void> pickFiles() async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      final File file = File(result.files.single.path!);
+      await uploadImage(
+        await file.readAsBytes(),
+        file.path,
+      );
+    }
+  }
+
+  Future<void> dragFiles(DropDoneDetails detail) async {
+    await uploadImage(
+      await detail.files.first.readAsBytes(),
+      detail.files.first.path,
+    );
+  }
+
+  Future<void> uploadImage(Uint8List data, String filePath) async {
+    try {
+      imageUploading = true;
+      notifyListeners();
+
+      final compressedData = compress(
+        ImageFileConfiguration(
+          input: ImageFile(
+            rawBytes: data,
+            filePath: filePath,
+          ),
+        ),
+      );
+
+      final bytes = compressedData.rawBytes;
+
+      final url = await _firestore.uploadImage(
+        imageBytes: bytes,
+        folderName: site.uid,
+      );
+
+      if (url == null) {
+        throw Exception('Image upload failed');
+      }
+
+      final image = img.decodeImage(bytes.toList());
+      final blurHash = BlurHash.encode(image!);
+
+      site.images.add(
+        SiteImage(blurHash.hash, url),
+      );
+    } on Exception catch (e) {
+      log(e.toString());
+    } finally {
+      imageUploading = false;
+      notifyListeners();
+    }
+  }
+
+  void deleteImage(SiteImage image) {
+    site.images.removeWhere((element) => element.url == image.url);
+    notifyListeners();
   }
 }
