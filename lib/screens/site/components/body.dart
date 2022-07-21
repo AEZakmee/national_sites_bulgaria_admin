@@ -1,6 +1,6 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:latlong2/latlong.dart' as latlong;
@@ -53,7 +53,7 @@ class SiteBody extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Site information',
+                              AppLocalizations.of(context)!.siteInformation,
                               style:
                                   FluentTheme.of(context).typography.bodyLarge,
                             ),
@@ -99,16 +99,15 @@ class SiteCreationRow extends StatelessWidget {
   Future<void> showFailDialog(
     BuildContext context,
   ) async {
+    final text = AppLocalizations.of(context)!;
     await showDialog(
       context: context,
       builder: (context) => ContentDialog(
-        title: const Text('Error'),
-        content: const Text(
-          'Something went wrong when uploading the site, please try again in a couple of minutes.',
-        ),
+        title: Text(text.error),
+        content: Text(text.errorBackend),
         actions: [
           Button(
-            child: const Text('Ok'),
+            child: Text(text.ok),
             onPressed: () => Navigator.pop(context),
           ),
         ],
@@ -119,16 +118,15 @@ class SiteCreationRow extends StatelessWidget {
   Future<void> emptyFieldsError(
     BuildContext context,
   ) async {
+    final text = AppLocalizations.of(context)!;
     await showDialog(
       context: context,
       builder: (context) => ContentDialog(
-        title: const Text('Empty fields'),
-        content: const Text(
-          'Please make sure you\'ve entered all the required data before submission.',
-        ),
+        title: Text(text.emptyFieldsSite),
+        content: Text(text.enterAllFields),
         actions: [
           Button(
-            child: const Text('Ok'),
+            child: Text(text.ok),
             onPressed: () => Navigator.pop(context),
           ),
         ],
@@ -159,8 +157,8 @@ class SiteCreationRow extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 context.watch<SiteScreenVM>().newSite
-                    ? 'Create site'
-                    : 'Update site',
+                    ? AppLocalizations.of(context)!.createSite
+                    : AppLocalizations.of(context)!.updateSite,
                 style: FluentTheme.of(context).typography.bodyLarge,
               ),
             ),
@@ -244,7 +242,7 @@ class CoordinatesRow extends StatelessWidget {
                 child: TextButton(
                   onPressed: viewModel.clearMap,
                   child: Text(
-                    'Clear',
+                    AppLocalizations.of(context)!.clear,
                     style: FluentTheme.of(context).typography.bodyLarge,
                   ),
                 ),
@@ -269,7 +267,7 @@ class SitePhotos extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Site photos',
+                    AppLocalizations.of(context)!.sitePhotos,
                     style: FluentTheme.of(context).typography.bodyLarge,
                   ),
                   const SizedBox(
@@ -307,7 +305,7 @@ class SitePhotos extends StatelessWidget {
                     width: double.infinity,
                     child: OutlinedButton(
                       onPressed: viewModel.pickFiles,
-                      child: const Text('Pick an image'),
+                      child: Text(AppLocalizations.of(context)!.pickImage),
                     ),
                   ),
                 ],
@@ -358,15 +356,15 @@ class _FileDropTargetState extends State<FileDropTarget> {
                 )
               : Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(
+                  children: [
+                    const Icon(
                       FluentIcons.file_image,
                       size: 30,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    Text('Drop here'),
+                    Text(AppLocalizations.of(context)!.dropHere),
                   ],
                 ),
         ),
@@ -418,6 +416,7 @@ class SiteInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.read<SiteScreenVM>();
+    final textProvider = AppLocalizations.of(context)!;
     return Form(
       key: context.read<SiteScreenVM>().formKey,
       child: Row(
@@ -431,33 +430,33 @@ class SiteInformation extends StatelessWidget {
                   children: [
                     TextFormBox(
                       controller: viewModel.numbController,
-                      header: 'Number',
-                      placeholder: 'Enter site number',
+                      header: textProvider.number,
+                      placeholder: textProvider.enterNumber,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Provide site number';
+                          return textProvider.enterNumber;
                         }
                         return null;
                       },
                     ),
                     TextFormBox(
                       controller: viewModel.nameController,
-                      header: 'Name',
-                      placeholder: 'Enter site name',
+                      header: textProvider.name,
+                      placeholder: textProvider.enterName,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Provide site name';
+                          return textProvider.enterNumber;
                         }
                         return null;
                       },
                     ),
                     TextFormBox(
                       controller: viewModel.townController,
-                      header: 'Town',
-                      placeholder: 'Enter site location',
+                      header: textProvider.location,
+                      placeholder: textProvider.enterLocation,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Provide site location';
+                          return textProvider.enterLocation;
                         }
                         return null;
                       },
@@ -471,12 +470,12 @@ class SiteInformation extends StatelessWidget {
           Expanded(
             child: TextFormBox(
               controller: viewModel.descController,
-              header: 'Description',
-              placeholder: 'Enter site description',
+              header: textProvider.description,
+              placeholder: textProvider.enterDescription,
               maxLines: 20,
               validator: (text) {
                 if (text == null || text.isEmpty) {
-                  return 'Provide site description';
+                  return textProvider.enterDescription;
                 }
                 return null;
               },

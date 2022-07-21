@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../data/models/site.dart';
 import '../../../../widgets/loading_indicator.dart';
@@ -21,18 +21,19 @@ class SitesBody extends StatelessWidget {
     await showDialog(
       context: context,
       builder: (context) => ContentDialog(
-        title: Text('Delete ${site.info.name}'),
-        content: Text('Are you sure you want to delete ${site.info.name}?'),
+        title: Text(site.info.name),
+        content: Text(
+            '${AppLocalizations.of(context)!.areYouSureDelete} ${site.info.name}?'),
         actions: [
           Button(
-            child: const Text('Delete'),
+            child: Text(AppLocalizations.of(context)!.delete),
             onPressed: () {
               Navigator.pop(context);
               return onDelete();
             },
           ),
           Button(
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
             onPressed: () => Navigator.pop(context),
           )
         ],
@@ -51,24 +52,77 @@ class SitesBody extends StatelessWidget {
             ),
           )
         : SitesGridView(
-            count: data.length,
+            count: data.length + 1,
             child: (index) => Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SiteCard(
-                imageUrl: data[index].images.first.url,
-                imageHash: data[index].images.first.hash,
-                title: data[index].info.name,
-                onTap: () => context.read<SitesPageVM>().goToSiteEditPage(
-                      context,
-                      data[index].uid,
+              child: index == 0
+                  ? const CreateNewSiteContainer()
+                  : SiteCard(
+                      imageUrl: data[index - 1].images.first.url,
+                      imageHash: data[index - 1].images.first.hash,
+                      title: data[index - 1].info.name,
+                      onTap: () => context.read<SitesPageVM>().goToSiteEditPage(
+                            context,
+                            data[index - 1].uid,
+                          ),
+                      onDeleteTap: () => showDeleteDialog(
+                        context,
+                        data[index - 1],
+                        () => context.read<SitesPageVM>().delete(
+                              data[index - 1].uid,
+                            ),
+                      ),
                     ),
-                onDeleteTap: () => showDeleteDialog(
-                  context,
-                  data[index],
-                  () => context.read<SitesPageVM>().delete(data[index].uid),
-                ),
-              ),
             ),
           );
   }
+}
+
+class CreateNewSiteContainer extends StatelessWidget {
+  const CreateNewSiteContainer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => HoverButton(
+        onTapDown: () => context.read<SitesPageVM>().goToSiteEditPage(context),
+        builder: (
+          BuildContext context,
+          Set<ButtonStates> state,
+        ) {
+          final theme = FluentTheme.of(context);
+          final isFocused = state.contains(ButtonStates.hovering);
+          Color backgroundColor = theme.micaBackgroundColor;
+          if (isFocused) {
+            backgroundColor = theme.activeColor.withOpacity(0.2);
+          }
+          return Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  FluentIcons.add,
+                  size: 45,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Flexible(
+                  child: Text(
+                    AppLocalizations.of(context)!.addNewSite,
+                    maxLines: 2,
+                    style: FluentTheme.of(context).typography.title,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
 }

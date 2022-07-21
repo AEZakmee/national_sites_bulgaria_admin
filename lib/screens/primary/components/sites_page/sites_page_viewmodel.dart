@@ -13,11 +13,12 @@ class SitesPageVM extends ChangeNotifier {
   final _dataRepo = locator<DataRepo>();
   final _firestoreService = locator<FirestoreService>();
 
-  Future<void> goToSiteEditPage(BuildContext context, String siteId) async {
+  Future<void> goToSiteEditPage(BuildContext context, [String? siteId]) async {
     await Navigator.of(context).pushNamed(
       Routes.site,
       arguments: SiteScreenArguments(siteId),
     );
+    await _dataRepo.updateSites();
   }
 
   Future<void> delete(String id) async {

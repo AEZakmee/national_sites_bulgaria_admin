@@ -4,15 +4,15 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 int handleNumber(BuildContext context) {
   final size = MediaQuery.of(context).size.width;
   if (size < 1100) {
-    return 2;
-  }
-  if (size < 1400) {
     return 3;
   }
-  if (size < 1700) {
+  if (size < 1400) {
     return 4;
   }
-  return 5;
+  if (size < 1700) {
+    return 5;
+  }
+  return 6;
 }
 
 class StaggeredListView extends StatelessWidget {
