@@ -1,5 +1,7 @@
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:latlong2/latlong.dart' as latlong;
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/models/site.dart';
@@ -71,11 +73,21 @@ class SiteBody extends StatelessWidget {
                         ),
                         const FluentVerticalSeparator(),
                         Expanded(
-                          child: GestureDetector(
-                            onTap: context.read<SiteScreenVM>().createSite,
-                            child: Container(
-                              color: Colors.red,
-                            ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: SelectionMap(),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap:
+                                      context.read<SiteScreenVM>().createSite,
+                                  child: Container(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -84,6 +96,22 @@ class SiteBody extends StatelessWidget {
                 ),
         ),
       );
+
+  FlutterMap SelectionMap() {
+    return FlutterMap(
+      options: MapOptions(
+        center: latlong.LatLng(
+          51.509364,
+          -0.128928,
+        ),
+      ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        ),
+      ],
+    );
+  }
 }
 
 class SitePhotos extends StatelessWidget {

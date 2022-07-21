@@ -45,6 +45,11 @@ class FirestoreService {
       .get()
       .then((snapshot) => Site.fromJson(snapshot.map));
 
+  Future<void> deleteSite(String uid) async {
+    await _db.collection('sites').document(uid).delete();
+    await _db.collection('rooms').document(uid).delete();
+  }
+
   Future<ChatRoom> fetchRoom(String siteId) => _db
       .collection('rooms')
       .document(siteId)

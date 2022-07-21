@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:blurhash_dart/blurhash_dart.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_compression/image_compression.dart';
 import 'package:desktop_drop/desktop_drop.dart';
@@ -28,6 +29,8 @@ class SiteScreenVM extends ChangeNotifier {
   final nameController = TextEditingController();
   final townController = TextEditingController();
   final descController = TextEditingController();
+
+  final mapController = MapController();
 
   late Site site;
 

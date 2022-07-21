@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../data/models/site.dart';
 import '../../../../widgets/loading_indicator.dart';
 import '../../../../widgets/staggered_animations.dart';
 import 'site_card.dart';
@@ -11,6 +12,33 @@ class SitesBody extends StatelessWidget {
   const SitesBody({
     Key? key,
   }) : super(key: key);
+
+  Future<void> showDeleteDialog(
+    BuildContext context,
+    Site site,
+    VoidCallback onDelete,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text('Delete ${site.info.name}'),
+        content: Text('Are you sure you want to delete ${site.info.name}?'),
+        actions: [
+          Button(
+            child: const Text('Delete'),
+            onPressed: () {
+              Navigator.pop(context);
+              return onDelete();
+            },
+          ),
+          Button(
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +62,11 @@ class SitesBody extends StatelessWidget {
                       context,
                       data[index].uid,
                     ),
-                onDeleteTap: () => context.read<SitesPageVM>().delete(
-                      data[index].uid,
-                    ),
+                onDeleteTap: () => showDeleteDialog(
+                  context,
+                  data[index],
+                  () => context.read<SitesPageVM>().delete(data[index].uid),
+                ),
               ),
             ),
           );
