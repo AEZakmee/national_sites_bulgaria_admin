@@ -1,7 +1,9 @@
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:latlong2/latlong.dart' as latlong;
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:fluttericon/mfg_labs_icons.dart';
+import 'package:latlong2/latlong.dart' as latlong;
 import 'package:provider/provider.dart';
 
 import '../../../data/models/site.dart';
@@ -38,80 +40,219 @@ class SiteBody extends StatelessWidget {
           padding: EdgeInsets.zero,
           content: context.select<SiteScreenVM, bool>((prov) => prov.loading)
               ? const SizedBox.shrink()
-              : Form(
-                  key: context.read<SiteScreenVM>().formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      bottom: 20,
-                      right: 20,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Site information',
-                                style: FluentTheme.of(context)
-                                    .typography
-                                    .bodyLarge,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Expanded(
-                                child: SiteInformation(),
-                              ),
-                              const FluentHorizontalSeparator(),
-                              const Expanded(
-                                child: SitePhotos(),
-                              ),
-                            ],
-                          ),
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    bottom: 20,
+                    right: 20,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Site information',
+                              style:
+                                  FluentTheme.of(context).typography.bodyLarge,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Expanded(
+                              child: SiteInformation(),
+                            ),
+                            const FluentHorizontalSeparator(),
+                            const Expanded(
+                              child: SitePhotos(),
+                            ),
+                          ],
                         ),
-                        const FluentVerticalSeparator(),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: SelectionMap(),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap:
-                                      context.read<SiteScreenVM>().createSite,
-                                  child: Container(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                      ),
+                      const FluentVerticalSeparator(),
+                      Expanded(
+                        child: Column(
+                          children: const [
+                            Expanded(
+                              flex: 2,
+                              child: SelectionMap(),
+                            ),
+                            CoordinatesRow(),
+                            SizedBox(
+                              height: 100,
+                            ),
+                            SiteCreationRow(),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
         ),
       );
+}
 
-  FlutterMap SelectionMap() {
-    return FlutterMap(
-      options: MapOptions(
-        center: latlong.LatLng(
-          51.509364,
-          -0.128928,
+class SiteCreationRow extends StatelessWidget {
+  const SiteCreationRow({Key? key}) : super(key: key);
+
+  Future<void> showFailDialog(
+    BuildContext context,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: const Text('Error'),
+        content: const Text(
+          'Something went wrong when uploading the site, please try again in a couple of minutes.',
         ),
+        actions: [
+          Button(
+            child: const Text('Ok'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
       ),
-      layers: [
-        TileLayerOptions(
-          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        ),
-      ],
     );
   }
+
+  Future<void> emptyFieldsError(
+    BuildContext context,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: const Text('Empty fields'),
+        content: const Text(
+          'Please make sure you\'ve entered all the required data before submission.',
+        ),
+        actions: [
+          Button(
+            child: const Text('Ok'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => OutlinedButton(
+        onPressed: () async {
+          final response = await context.read<SiteScreenVM>().submit();
+          switch (response) {
+            case SubmitResponse.success:
+              Navigator.of(context).pop();
+              break;
+            case SubmitResponse.fail:
+              await showFailDialog(context);
+              break;
+            case SubmitResponse.errorFields:
+              await emptyFieldsError(context);
+              break;
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                context.watch<SiteScreenVM>().newSite
+                    ? 'Create site'
+                    : 'Update site',
+                style: FluentTheme.of(context).typography.bodyLarge,
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+class SelectionMap extends StatelessWidget {
+  const SelectionMap({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Consumer<SiteScreenVM>(
+        builder: (context, viewModel, _) => FlutterMap(
+          mapController: viewModel.mapController,
+          options: MapOptions(
+            center: latlong.LatLng(
+              42.5,
+              26,
+            ),
+            zoom: 6,
+            onTap: (_, position) => viewModel.mapClick(position),
+          ),
+          layers: [
+            TileLayerOptions(
+              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+              subdomains: ['a', 'b', 'c'],
+            ),
+            MarkerLayerOptions(
+              markers: [
+                if (viewModel.point != null)
+                  Marker(
+                    point: viewModel.point!,
+                    builder: (context) => Icon(
+                      MfgLabs.location,
+                      color: Colors.red,
+                      size: 30,
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      );
+}
+
+class CoordinatesRow extends StatelessWidget {
+  const CoordinatesRow({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Consumer<SiteScreenVM>(
+        builder: (context, viewModel, _) => SizedBox(
+          height: 50,
+          child: Stack(
+            children: [
+              if (viewModel.point != null)
+                Align(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        viewModel.point!.latitude.toStringAsFixed(5),
+                        style: FluentTheme.of(context).typography.bodyLarge,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Text(','),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        viewModel.point!.longitude.toStringAsFixed(5),
+                        style: FluentTheme.of(context).typography.bodyLarge,
+                      ),
+                    ],
+                  ),
+                ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: viewModel.clearMap,
+                  child: Text(
+                    'Clear',
+                    style: FluentTheme.of(context).typography.bodyLarge,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
 }
 
 class SitePhotos extends StatelessWidget {
@@ -277,69 +418,72 @@ class SiteInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.read<SiteScreenVM>();
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            controller: ScrollController(),
-            child: Scrollbar(
-              child: Column(
-                children: [
-                  TextFormBox(
-                    controller: viewModel.numbController,
-                    header: 'Number',
-                    placeholder: 'Enter site number',
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Provide site number';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormBox(
-                    controller: viewModel.nameController,
-                    header: 'Name',
-                    placeholder: 'Enter site name',
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Provide site name';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormBox(
-                    controller: viewModel.townController,
-                    header: 'Town',
-                    placeholder: 'Enter site location',
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Provide site location';
-                      }
-                      return null;
-                    },
-                  ),
-                ],
+    return Form(
+      key: context.read<SiteScreenVM>().formKey,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              controller: ScrollController(),
+              child: Scrollbar(
+                child: Column(
+                  children: [
+                    TextFormBox(
+                      controller: viewModel.numbController,
+                      header: 'Number',
+                      placeholder: 'Enter site number',
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Provide site number';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormBox(
+                      controller: viewModel.nameController,
+                      header: 'Name',
+                      placeholder: 'Enter site name',
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Provide site name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormBox(
+                      controller: viewModel.townController,
+                      header: 'Town',
+                      placeholder: 'Enter site location',
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Provide site location';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormBox(
-            controller: viewModel.descController,
-            header: 'Description',
-            placeholder: 'Enter site description',
-            maxLines: 20,
-            validator: (text) {
-              if (text == null || text.isEmpty) {
-                return 'Provide site description';
-              }
-              return null;
-            },
+          const SizedBox(width: 20),
+          Expanded(
+            child: TextFormBox(
+              controller: viewModel.descController,
+              header: 'Description',
+              placeholder: 'Enter site description',
+              maxLines: 20,
+              validator: (text) {
+                if (text == null || text.isEmpty) {
+                  return 'Provide site description';
+                }
+                return null;
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

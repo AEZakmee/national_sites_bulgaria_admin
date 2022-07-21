@@ -27,7 +27,7 @@ class Body extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   content: ChatPage(),
                 ),
-                ScaffoldPage(
+                const ScaffoldPage(
                   content: Text('Kur3'),
                 ),
                 ScaffoldPage(

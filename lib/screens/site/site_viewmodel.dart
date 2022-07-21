@@ -3,19 +3,24 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
-import 'package:blurhash_dart/blurhash_dart.dart';
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:image/image.dart' as img;
 import 'package:image_compression/image_compression.dart';
-import 'package:desktop_drop/desktop_drop.dart';
+import 'package:latlong2/latlong.dart' as latlong;
 
 import '../../app/locator.dart';
 import '../../data/models/site.dart';
 import '../../services/firestore_service.dart';
 import '../../utilitiies/blur_hash_isolate.dart';
 import 'site_screen.dart';
+
+enum SubmitResponse {
+  success,
+  fail,
+  errorFields,
+}
 
 class SiteScreenVM extends ChangeNotifier {
   final _firestore = locator<FirestoreService>();
@@ -32,13 +37,17 @@ class SiteScreenVM extends ChangeNotifier {
 
   final mapController = MapController();
 
+  latlong.LatLng? point;
+
   late Site site;
+  bool newSite = true;
 
   bool loading = true;
 
   Future<void> init() async {
     final id = args?.siteId;
     if (id != null) {
+      newSite = false;
       await loadExistingSite(id);
     } else {
       loadEmptySide();
@@ -54,6 +63,7 @@ class SiteScreenVM extends ChangeNotifier {
     nameController.text = site.info.name;
     townController.text = site.info.town;
     descController.text = site.info.description;
+    point = latlong.LatLng(site.coordinates.lat, site.coordinates.lng);
   }
 
   void loadEmptySide() {
@@ -66,11 +76,44 @@ class SiteScreenVM extends ChangeNotifier {
     Navigator.of(context).pop();
   }
 
-  Future<void> createSite() async {
-    formKey.currentState!.validate();
+  Future<SubmitResponse> submit() async {
+    SubmitResponse response = SubmitResponse.fail;
+    final formsValid = formKey.currentState!.validate();
+    final mapValid = point != null;
+    final imagesValid = site.images.isNotEmpty;
+    if (formsValid && mapValid && imagesValid) {
+      site.info.name = nameController.text;
+      site.info.town = townController.text;
+      site.info.description = descController.text;
+
+      site
+        ..siteNumber = numbController.text
+        ..coordinates = Coordinates(point!.latitude, point!.longitude);
+
+      try {
+        await _firestore.createSite(site);
+        response = SubmitResponse.success;
+      } on Exception catch (e) {
+        log(e.toString());
+      }
+    } else {
+      response = SubmitResponse.errorFields;
+    }
+
+    return response;
   }
 
   bool imageUploading = false;
+
+  void mapClick(latlong.LatLng position) {
+    point = position;
+    notifyListeners();
+  }
+
+  void clearMap() {
+    point = null;
+    notifyListeners();
+  }
 
   Future<void> pickFiles() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles();
