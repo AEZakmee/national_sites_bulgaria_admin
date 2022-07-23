@@ -18,58 +18,53 @@ class Body extends StatelessWidget {
         builder: (context, prov, child) => Stack(
           children: [
             Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: FluentTheme.of(context).micaBackgroundColor,
-                ),
-                child: Center(
-                  child: Stack(
-                    children: [
-                      const ArrowButtonBackground(
-                        hasShadow: true,
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Card(
-                            elevation: 16,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const InputFields(),
-                                  if (prov.hasAuthError)
-                                    Center(
-                                      child: Text(
-                                        prov.authErrorString(context),
-                                        style: FluentTheme.of(context)
-                                            .typography
-                                            .caption,
-                                      ),
+              child: Center(
+                child: Stack(
+                  children: [
+                    const ArrowButtonBackground(
+                      hasShadow: true,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Card(
+                          elevation: 16,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const InputFields(),
+                                if (prov.hasAuthError)
+                                  Center(
+                                    child: Text(
+                                      prov.authErrorString(context),
+                                      style: FluentTheme.of(context)
+                                          .typography
+                                          .caption,
                                     ),
-                                  const SizedBox(
-                                    height: 55,
                                   ),
-                                ],
-                              ),
+                                const SizedBox(
+                                  height: 55,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 55,
-                          ),
-                        ],
-                      ),
-                      ArrowButtonBackground(
-                        child: ArrowButton(
-                          onPress: () => context.read<AuthVM>().signUp(context),
-                          isLoading: context.watch<AuthVM>().isLoading,
                         ),
+                        const SizedBox(
+                          height: 55,
+                        ),
+                      ],
+                    ),
+                    ArrowButtonBackground(
+                      child: ArrowButton(
+                        onPress: () => context.read<AuthVM>().signUp(context),
+                        isLoading: context.watch<AuthVM>().isLoading,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

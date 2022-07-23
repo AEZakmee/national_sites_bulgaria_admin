@@ -15,6 +15,7 @@ class LoginWidget extends StatelessWidget {
           child: ChangeNotifierProvider(
             create: (_) => AuthVM(),
             child: const Scaffold(
+              backgroundColor: Colors.transparent,
               body: Body(),
             ),
           ),

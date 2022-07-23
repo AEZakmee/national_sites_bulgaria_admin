@@ -46,5 +46,8 @@
   "location": "Град",
   "enterLocation": "гр. София...",
   "description": "Описание",
-  "enterDescription": "Добави описание на обекта"
+  "enterDescription": "Добави описание на обекта",
+  "visualSettings": "Визуални настройки",
+  "darkTheme": "Тъмна тема",
+  "language": "Език"
 }

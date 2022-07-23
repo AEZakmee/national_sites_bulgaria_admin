@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../main_viewmodel.dart';
 import 'chat_page/chat_page.dart';
+import 'settings_page/settings_page.dart';
 import 'sites_page/sites_page.dart';
 
 class Body extends StatelessWidget {
@@ -34,11 +35,9 @@ class Body extends StatelessWidget {
               ScaffoldPage(
                 content: Text(text.statistics),
               ),
-              ScaffoldPage(
-                content: Text(
-                  text.settings,
-                  style: FluentTheme.of(context).typography.title,
-                ),
+              const ScaffoldPage(
+                padding: EdgeInsets.zero,
+                content: SettingsPage(),
               ),
             ],
           ),
