@@ -8,6 +8,7 @@ import '../main_viewmodel.dart';
 import 'chat_page/chat_page.dart';
 import 'settings_page/settings_page.dart';
 import 'sites_page/sites_page.dart';
+import 'statistics_page/statistics_page.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -23,19 +24,20 @@ class Body extends StatelessWidget {
         return NavigationView(
           content: NavigationBody(
             index: viewModel.index,
-            children: [
-              const ScaffoldPage(
+            children: const [
+              ScaffoldPage(
                 padding: EdgeInsets.zero,
                 content: SitesPage(),
               ),
-              const ScaffoldPage(
+              ScaffoldPage(
                 padding: EdgeInsets.zero,
                 content: ChatPage(),
               ),
               ScaffoldPage(
-                content: Text(text.statistics),
+                padding: EdgeInsets.zero,
+                content: StatisticsPage(),
               ),
-              const ScaffoldPage(
+              ScaffoldPage(
                 padding: EdgeInsets.zero,
                 content: SettingsPage(),
               ),
