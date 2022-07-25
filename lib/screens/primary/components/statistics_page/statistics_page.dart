@@ -10,6 +10,7 @@ class StatisticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ViewModelBuilder<StatisticsPageVM>(
         viewModelBuilder: StatisticsPageVM.new,
+        onModelReady: (viewModel) => viewModel.init(),
         builder: (context) => const StatisticsBody(),
       );
 }

@@ -1,3 +1,5 @@
+import 'package:fluent_ui/fluent_ui.dart';
+
 extension NameExtension on String {
   String parsePersonTwoCharactersName() {
     final spaceData = split(' ');
@@ -13,5 +15,17 @@ extension NameExtension on String {
     }
 
     return substring(0, 1).toUpperCase();
+  }
+}
+
+extension ColorExtension on String {
+  Color toColor() {
+    final hexString = this;
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) {
+      buffer.write('ff');
+    }
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
