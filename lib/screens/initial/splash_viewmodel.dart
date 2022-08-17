@@ -6,8 +6,15 @@ import '../../app/router.dart';
 import '../../data/repos/data_repo.dart';
 
 class InitialViewModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DataRepo _dataRepo = locator<DataRepo>();
+  final FirebaseAuth _auth;
+  final DataRepo _dataRepo;
+
+  InitialViewModel({
+    required auth,
+    required dataRepo,
+  })  : _auth = auth,
+        _dataRepo = dataRepo;
+
   bool userIsLogged = false;
 
   bool showLogin = false;

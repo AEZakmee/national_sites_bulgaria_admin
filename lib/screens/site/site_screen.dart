@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../app/locator.dart';
 import '../../widgets/viewmodel_builder.dart';
 import 'components/body.dart';
 import 'site_viewmodel.dart';
@@ -18,8 +19,8 @@ class SiteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ViewModelBuilder<SiteScreenVM>(
-        viewModelBuilder: () => SiteScreenVM(args),
-        onModelReady: (vm) => vm.init(),
+        viewModelBuilder: locator<SiteScreenVM>,
+        onModelReady: (vm) => vm.init(args),
         onDispose: (vm) => vm.onDispose(),
         builder: (context) => const SiteBody(),
       );

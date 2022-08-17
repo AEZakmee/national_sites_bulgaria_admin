@@ -16,8 +16,14 @@ const googleStorageApi = 'https://firebasestorage.googleapis.com/v0/b/';
 const rootFolder = 'places_pictures';
 
 class FirestoreService {
-  final _db = Firestore.instance;
-  final _auth = FirebaseAuth.instance;
+  final Firestore _db;
+  final FirebaseAuth _auth;
+
+  FirestoreService({
+    required db,
+    required auth,
+  })  : _db = db,
+        _auth = auth;
 
   String get _userId => _auth.userId;
   String get token => '';

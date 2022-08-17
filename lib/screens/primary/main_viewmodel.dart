@@ -1,13 +1,16 @@
 import 'package:firedart/auth/firebase_auth.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
-import '../../app/locator.dart';
 import '../../app/router.dart';
 import '../../data/repos/data_repo.dart';
 
 class PrimaryViewModel extends ChangeNotifier {
-  final _auth = FirebaseAuth.instance;
-  final _dataRepo = locator<DataRepo>();
+  final FirebaseAuth _auth;
+  final DataRepo _dataRepo;
+
+  PrimaryViewModel({required auth, required dataRepo})
+      : _auth = auth,
+        _dataRepo = dataRepo;
 
   void init() {
     _dataRepo

@@ -23,12 +23,11 @@ enum SubmitResponse {
 }
 
 class SiteScreenVM extends ChangeNotifier {
-  final _firestore = locator<FirestoreService>();
+  final FirestoreService _firestore;
 
   final formKey = GlobalKey<FormState>();
 
-  final SiteScreenArguments? args;
-  SiteScreenVM(this.args);
+  late final SiteScreenArguments? args;
 
   final numbController = TextEditingController();
   final nameController = TextEditingController();
@@ -44,7 +43,10 @@ class SiteScreenVM extends ChangeNotifier {
 
   bool loading = true;
 
-  Future<void> init() async {
+  SiteScreenVM({required firestore}) : _firestore = firestore;
+
+  Future<void> init(SiteScreenArguments? arguments) async {
+    args = arguments;
     final id = args?.siteId;
     if (id != null) {
       newSite = false;
