@@ -42,6 +42,7 @@ class SiteScreenVM extends ChangeNotifier {
   bool newSite = true;
 
   bool loading = true;
+  bool error = false;
 
   SiteScreenVM({required firestore}) : _firestore = firestore;
 
@@ -60,12 +61,17 @@ class SiteScreenVM extends ChangeNotifier {
   }
 
   Future<void> loadExistingSite(String id) async {
-    site = await _firestore.fetchSite(id);
-    numbController.text = site.siteNumber;
-    nameController.text = site.info.name;
-    townController.text = site.info.town;
-    descController.text = site.info.description;
-    point = latlong.LatLng(site.coordinates.lat, site.coordinates.lng);
+    final response = await _firestore.fetchSite(id);
+    if (response.success) {
+      site = response.data;
+      numbController.text = site.siteNumber;
+      nameController.text = site.info.name;
+      townController.text = site.info.town;
+      descController.text = site.info.description;
+      point = latlong.LatLng(site.coordinates.lat, site.coordinates.lng);
+    } else {
+      error = true;
+    }
   }
 
   void loadEmptySide() {

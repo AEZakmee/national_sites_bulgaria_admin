@@ -11,7 +11,6 @@ class SitesPage extends StatelessWidget {
   Widget build(BuildContext context) => ViewModelBuilder<SitesPageVM>(
         viewModelBuilder: SitesPageVM.new,
         onModelReady: (viewModel) => viewModel.init(),
-        onDispose: (viewModel) => viewModel.onDispose(),
         builder: (context) => const SitesBody(),
       );
 }

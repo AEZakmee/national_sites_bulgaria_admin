@@ -13,32 +13,37 @@ class SitesPageVM extends ChangeNotifier {
   final _dataRepo = locator<DataRepo>();
   final _firestoreService = locator<FirestoreService>();
 
+  List<Site> sites = [];
+
   Future<void> goToSiteEditPage(BuildContext context, [String? siteId]) async {
     await Navigator.of(context).pushNamed(
       Routes.site,
       arguments: SiteScreenArguments(siteId),
     );
-    await _dataRepo.updateSites();
+    await updateSites();
+  }
+
+  Future<void> updateSites() async {
+    final response = await _firestoreService.fetchSites();
+    if (response.success) {
+      sites = response.data;
+    } else {
+      error = true;
+    }
+    notifyListeners();
   }
 
   Future<void> delete(String id) async {
-    try {
-      await _firestoreService.deleteSite(id);
-      await _dataRepo.updateSites();
-    } on Exception catch (e) {
-      log(e.toString());
-    }
+    await _firestoreService.deleteSite(id);
+    await updateSites();
   }
 
-  bool loading = false;
-
-  List<Site> get sites => _dataRepo.sites;
+  bool loading = true;
+  bool error = false;
 
   Future<void> init() async {
-    _dataRepo.addListener(notifyListeners);
-  }
-
-  void onDispose() {
-    _dataRepo.removeListener(notifyListeners);
+    await updateSites();
+    loading = false;
+    notifyListeners();
   }
 }

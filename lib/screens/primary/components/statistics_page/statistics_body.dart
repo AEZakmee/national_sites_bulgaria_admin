@@ -11,39 +11,50 @@ class StatisticsBody extends StatelessWidget {
   const StatisticsBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-      context.watch<StatisticsPageVM>().loading
-          ? const SizedBox(
-              width: double.infinity,
-              child: Center(
-                child: LoadingIndicator(),
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<StatisticsPageVM>();
+    if (viewModel.loading) {
+      return const SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: LoadingIndicator(),
+        ),
+      );
+    }
+    if (viewModel.error) {
+      return const SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: ErrorIndicator(),
+        ),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: SingleChildScrollView(
+        child: Consumer<StatisticsPageVM>(
+          builder: (context, viewModel, _) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: TopRow(),
               ),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: SingleChildScrollView(
-                child: Consumer<StatisticsPageVM>(
-                  builder: (context, viewModel, _) => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      SizedBox(
-                        height: 300,
-                        width: double.infinity,
-                        child: TopRow(),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      SizedBox(
-                        height: 800,
-                        width: double.infinity,
-                        child: BottomRow(),
-                      ),
-                    ],
-                  ),
-                ),
+              SizedBox(
+                height: 50,
               ),
-            );
+              SizedBox(
+                height: 800,
+                width: double.infinity,
+                child: BottomRow(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class BottomRow extends StatelessWidget {

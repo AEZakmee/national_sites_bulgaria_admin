@@ -70,8 +70,16 @@ class StatisticsPageVM extends ChangeNotifier {
   late List<LinearData> mostPhotosSites;
 
   bool loading = true;
+  bool error = false;
   Future<void> init() async {
-    final allSites = await _firestoreService.fetchSites();
+    final response = await _firestoreService.fetchSites();
+    if (!response.success) {
+      error = true;
+      loading = false;
+      notifyListeners();
+    }
+
+    final allSites = response.data;
 
     final List<Site> votedSites =
         allSites.where((element) => element.rating.count > 0).toList(
