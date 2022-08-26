@@ -33,9 +33,16 @@ final colorShades = [
   '#040d14',
 ];
 
+class Data {
+  int number;
+  final String title;
+
+  Data({required this.number, required this.title});
+}
+
 class LinearData {
   final int domainFn;
-  final num measureFn;
+  num measureFn;
   final String hexColor;
   String? _label;
   String get label => _label ?? domainFn.toString();
@@ -135,6 +142,48 @@ class StatisticsPageVM extends ChangeNotifier {
         likedSites[index].rating.total / likedSites[index].rating.count,
         colorTints[index],
         likedSites[index].info.name,
+      ),
+    );
+
+    final List<Site> mostPhotosList = List.generate(
+      allSites.length,
+      (index) => allSites[index],
+    );
+
+    mostPhotosList.sort((a, b) => a.images.length > b.images.length ? 0 : 1);
+
+    mostPhotosSites = List.generate(
+      mostPhotosList.length.clamp(0, 10),
+      (index) => LinearData(
+        index,
+        mostPhotosList[index].images.length,
+        colorTints[index],
+        mostPhotosList[index].info.name,
+      ),
+    );
+
+    final List<Data> sitesTownData = [];
+    for (final site in allSites) {
+      final contains =
+          sitesTownData.map((e) => e.title).contains(site.info.town);
+      if (contains) {
+        sitesTownData
+            .firstWhere((element) => element.title == site.info.town)
+            .number++;
+      } else {
+        sitesTownData.add(Data(number: 1, title: site.info.town));
+      }
+    }
+
+    sitesTownData.sort((a, b) => a.number > b.number ? 0 : 1);
+
+    mostSitesTown = List.generate(
+      sitesTownData.length.clamp(0, 10),
+      (index) => LinearData(
+        index,
+        sitesTownData[index].number,
+        colorTints[index],
+        sitesTownData[index].title,
       ),
     );
 

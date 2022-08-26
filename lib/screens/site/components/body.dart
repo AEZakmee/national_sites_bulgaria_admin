@@ -441,7 +441,7 @@ class SiteInformation extends StatelessWidget {
                       placeholder: textProvider.enterNumber,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return textProvider.enterNumber;
+                          return textProvider.enterDataError;
                         }
                         return null;
                       },
@@ -452,7 +452,7 @@ class SiteInformation extends StatelessWidget {
                       placeholder: textProvider.enterName,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return textProvider.enterNumber;
+                          return textProvider.enterDataError;
                         }
                         return null;
                       },
@@ -463,7 +463,7 @@ class SiteInformation extends StatelessWidget {
                       placeholder: textProvider.enterLocation,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return textProvider.enterLocation;
+                          return textProvider.enterDataError;
                         }
                         return null;
                       },
@@ -482,7 +482,7 @@ class SiteInformation extends StatelessWidget {
               maxLines: 20,
               validator: (text) {
                 if (text == null || text.isEmpty) {
-                  return textProvider.enterDescription;
+                  return textProvider.enterDataError;
                 }
                 return null;
               },

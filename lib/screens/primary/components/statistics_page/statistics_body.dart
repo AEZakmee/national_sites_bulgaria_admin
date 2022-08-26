@@ -75,11 +75,11 @@ class BottomRow extends StatelessWidget {
               label: 'Most disliked sites',
             ),
             BottomRowComponent(
-              data: viewModel.mostLikedSites,
+              data: viewModel.mostSitesTown,
               label: 'Town with most sites',
             ),
             BottomRowComponent(
-              data: viewModel.mostDislikedSites,
+              data: viewModel.mostPhotosSites,
               label: 'Site with most images',
             ),
           ],
