@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_catches_without_on_clauses
+
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firedart/auth/firebase_auth.dart';
@@ -7,6 +10,7 @@ import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../data/api_response.dart';
 import '../data/models/app_user.dart';
 import '../data/models/chat_room.dart';
 import '../data/models/message.dart';
@@ -28,11 +32,23 @@ class FirestoreService {
   String get _userId => _auth.userId;
   String get token => '';
 
-  Future<AppUser> fetchUser() => _db
-      .collection('users')
-      .document(_userId)
-      .get()
-      .then((snapshot) => AppUser.fromJson(snapshot.map));
+  Future<ApiResponse<AppUser>> fetchUser() async {
+    bool success = false;
+    AppUser? user;
+
+    try {
+      user = await _db
+          .collection('users')
+          .document(_userId)
+          .get()
+          .then((snapshot) => AppUser.fromJson(snapshot.map));
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+
+    return ApiResponse(success: success, data: user);
+  }
 
   Stream<AppUser> userStream() => _db
       .collection('users')
@@ -40,43 +56,114 @@ class FirestoreService {
       .stream
       .map((event) => AppUser.fromJson(event!.map));
 
-  Future<List<Site>> fetchSites() async {
-    final docs = await _db.collection('sites').get();
-    return docs.map((e) => Site.fromJson(e.map)).toList();
+  Future<ApiResponse<List<Site>>> fetchSites() async {
+    bool success = false;
+    List<Site>? sites;
+    try {
+      final docs = await _db.collection('sites').get();
+      sites = docs.map((e) => Site.fromJson(e.map)).toList();
+
+      success = true;
+    } catch (e) {
+      log('fetchSites$e');
+    }
+
+    return ApiResponse(success: success, data: sites);
   }
 
-  Future<Site> fetchSite(String uid) => _db
-      .collection('sites')
-      .document(uid)
-      .get()
-      .then((snapshot) => Site.fromJson(snapshot.map));
+  Future<ApiResponse<Site>> fetchSite(String uid) async {
+    bool success = false;
+    Site? site;
 
-  Future<void> createSite(Site site) =>
-      _db.collection('sites').document(site.uid).set(site.toJson());
+    try {
+      site = await _db
+          .collection('sites')
+          .document(uid)
+          .get()
+          .then((snapshot) => Site.fromJson(snapshot.map));
 
-  Future<void> deleteSite(String uid) async {
-    await _db.collection('sites').document(uid).delete();
-    await _db.collection('rooms').document(uid).delete();
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+
+    return ApiResponse(success: success, data: site);
   }
 
-  Future<ChatRoom> fetchRoom(String siteId) => _db
-      .collection('rooms')
-      .document(siteId)
-      .get()
-      .then((value) => ChatRoom.fromJson(value.map));
+  Future<bool> createSite(Site site) async {
+    bool success = false;
+    try {
+      await _db.collection('sites').document(site.uid).set(site.toJson());
+      success = true;
+    } catch (e) {
+      log('createSite$e');
+    }
 
-  Future<List<ChatRoom>> fetchRooms() async {
-    final docs = await _db.collection('rooms').get();
-    return docs.map((e) => ChatRoom.fromJson(e.map)).toList();
+    return success;
   }
 
-  Future<List<ChatMessage>> fetchMessages(String siteId) async {
-    final docs = await _db
-        .collection('rooms')
-        .document(siteId)
-        .collection('messages')
-        .get();
-    return docs.map((e) => ChatMessage.fromJson(e.map)).toList();
+  Future<bool> deleteSite(String uid) async {
+    bool success = false;
+    try {
+      await _db.collection('sites').document(uid).delete();
+      await _db.collection('rooms').document(uid).delete();
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+    return success;
+  }
+
+  Future<ApiResponse<ChatRoom>> fetchRoom(String siteId) async {
+    bool success = false;
+    ChatRoom? room;
+
+    try {
+      room = await _db
+          .collection('rooms')
+          .document(siteId)
+          .get()
+          .then((value) => ChatRoom.fromJson(value.map));
+
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+
+    return ApiResponse(success: success, data: room);
+  }
+
+  Future<ApiResponse<List<ChatRoom>>> fetchRooms() async {
+    bool success = false;
+    List<ChatRoom>? rooms;
+    try {
+      final docs = await _db.collection('rooms').get();
+      rooms = docs.map((e) => ChatRoom.fromJson(e.map)).toList();
+
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+
+    return ApiResponse(success: success, data: rooms);
+  }
+
+  Future<ApiResponse<List<ChatMessage>>> fetchMessages(String siteId) async {
+    bool success = false;
+    List<ChatMessage>? messages;
+    try {
+      final docs = await _db
+          .collection('rooms')
+          .document(siteId)
+          .collection('messages')
+          .get();
+      messages = docs.map((e) => ChatMessage.fromJson(e.map)).toList();
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+
+    return ApiResponse(success: success, data: messages);
   }
 
   Future<String?> uploadImage({
@@ -95,6 +182,9 @@ class FirestoreService {
       final response = await http.post(
         Uri.parse(storageUrl),
         body: imageBytes,
+        headers: {
+          HttpHeaders.authorizationHeader: await _auth.tokenProvider.idToken
+        },
       );
 
       final downloadToken = jsonDecode(response.body)['downloadTokens'];

@@ -49,5 +49,6 @@
   "enterDescription": "Добави описание на обекта",
   "visualSettings": "Визуални настройки",
   "darkTheme": "Тъмна тема",
-  "language": "Език"
+  "language": "Език",
+  "enterDataError": "Добаваете нужната информация"
 }

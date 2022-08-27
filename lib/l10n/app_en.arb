@@ -49,5 +49,6 @@
   "enterDescription": "Enter site description",
   "visualSettings": "Visual settings",
   "darkTheme": "Dark theme",
-  "language": "Language"
+  "language": "Language",
+  "enterDataError": "Enter the required information"
 }

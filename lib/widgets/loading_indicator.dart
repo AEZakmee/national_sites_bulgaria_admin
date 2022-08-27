@@ -40,3 +40,18 @@ class LoadingIndicator extends StatelessWidget {
         ),
       );
 }
+
+class ErrorIndicator extends StatelessWidget {
+  const ErrorIndicator({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        height: 200,
+        width: 200,
+        child: Lottie.asset(
+          'assets/lottie/error.json',
+        ),
+      );
+}

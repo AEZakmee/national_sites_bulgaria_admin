@@ -44,37 +44,49 @@ class SitesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = context.watch<SitesPageVM>().sites;
-    return context.watch<SitesPageVM>().loading
-        ? const SizedBox(
-            width: double.infinity,
-            child: Center(
-              child: LoadingIndicator(),
-            ),
-          )
-        : SitesGridView(
-            count: data.length + 1,
-            child: (index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: index == 0
-                  ? const CreateNewSiteContainer()
-                  : SiteCard(
-                      imageUrl: data[index - 1].images.first.url,
-                      imageHash: data[index - 1].images.first.hash,
-                      title: data[index - 1].info.name,
-                      onTap: () => context.read<SitesPageVM>().goToSiteEditPage(
-                            context,
-                            data[index - 1].uid,
-                          ),
-                      onDeleteTap: () => showDeleteDialog(
-                        context,
-                        data[index - 1],
-                        () => context.read<SitesPageVM>().delete(
-                              data[index - 1].uid,
-                            ),
-                      ),
+    final viewModel = context.watch<SitesPageVM>();
+    if (viewModel.loading) {
+      return const SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: LoadingIndicator(),
+        ),
+      );
+    }
+
+    if (viewModel.error) {
+      return const SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: ErrorIndicator(),
+        ),
+      );
+    }
+
+    return SitesGridView(
+      count: data.length + 1,
+      child: (index) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: index == 0
+            ? const CreateNewSiteContainer()
+            : SiteCard(
+                imageUrl: data[index - 1].images.first.url,
+                imageHash: data[index - 1].images.first.hash,
+                title: data[index - 1].info.name,
+                onTap: () => context.read<SitesPageVM>().goToSiteEditPage(
+                      context,
+                      data[index - 1].uid,
                     ),
-            ),
-          );
+                onDeleteTap: () => showDeleteDialog(
+                  context,
+                  data[index - 1],
+                  () => context.read<SitesPageVM>().delete(
+                        data[index - 1].uid,
+                      ),
+                ),
+              ),
+      ),
+    );
   }
 }
 

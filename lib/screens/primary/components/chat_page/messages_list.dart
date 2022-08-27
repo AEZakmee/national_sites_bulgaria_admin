@@ -36,20 +36,23 @@ class MessagesBody extends StatelessWidget {
       itemCount: data.length,
       reverse: true,
       controller: ScrollController(),
-      itemBuilder: (BuildContext context, int index) => MessageBox(
-        message: data[index],
-        sendByUser: context.read<ChatPageVM>().sendByUser(data[index]),
-        first: firstFromThisUser(
-          data[index],
-          index > 0 ? data[index - 1] : null,
-        ),
-        last: lastFromThisUser(
-          data[index],
-          index < data.length - 1 ? data[index + 1] : null,
-        ),
-        overOneHour: overOneHourThanPrevious(
-          data[index],
-          index < data.length - 1 ? data[index + 1] : null,
+      itemBuilder: (BuildContext context, int index) => SizedBox(
+        width: 200,
+        child: MessageBox(
+          message: data[index],
+          sendByUser: context.read<ChatPageVM>().sendByUser(data[index]),
+          first: firstFromThisUser(
+            data[index],
+            index > 0 ? data[index - 1] : null,
+          ),
+          last: lastFromThisUser(
+            data[index],
+            index < data.length - 1 ? data[index + 1] : null,
+          ),
+          overOneHour: overOneHourThanPrevious(
+            data[index],
+            index < data.length - 1 ? data[index + 1] : null,
+          ),
         ),
       ),
     );

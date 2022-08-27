@@ -7,8 +7,7 @@ class ThemeService {
 
   Future<void> init() async {
     brightness = await getTheme() ??
-        SchedulerBinding.instance?.window.platformBrightness ??
-        Brightness.dark;
+        SchedulerBinding.instance!.window.platformBrightness;
   }
 
   final prefKey = 'theme';

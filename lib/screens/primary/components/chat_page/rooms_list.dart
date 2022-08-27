@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart';
 
+import '../../../../data/api_response.dart';
 import '../../../../data/models/chat_room.dart';
 import '../../../../widgets/cached_image.dart';
 import '../../../../widgets/loading_indicator.dart';
@@ -14,17 +15,21 @@ class RoomsList extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => FutureBuilder<List<ChatRoom>>(
+  Widget build(BuildContext context) =>
+      FutureBuilder<ApiResponse<List<ChatRoom>>>(
         future: context.read<ChatPageVM>().rooms,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const LoadingIndicator();
           }
-          final rooms = snapshot.data!;
+          final response = snapshot.data!;
+          if (!response.success) {
+            return const ErrorIndicator();
+          }
           return StaggeredListView(
-            count: rooms.length,
+            count: response.data.length,
             child: (index) => RoomCard(
-              room: rooms[index],
+              room: response.data[index],
             ),
           );
         },

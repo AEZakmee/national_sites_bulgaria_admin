@@ -86,7 +86,7 @@ class _SendByCurrentUser extends StatelessWidget {
               const Spacer(),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.8,
+                  maxWidth: MediaQuery.of(context).size.width / 3,
                 ),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -215,7 +215,7 @@ class _SendByAnotherUser extends StatelessWidget {
               ),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  maxWidth: MediaQuery.of(context).size.width / 3,
                 ),
                 child: DecoratedBox(
                   decoration: BoxDecoration(

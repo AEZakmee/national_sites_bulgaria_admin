@@ -40,55 +40,62 @@ class SiteBody extends StatelessWidget {
           padding: EdgeInsets.zero,
           content: context.select<SiteScreenVM, bool>((prov) => prov.loading)
               ? const SizedBox.shrink()
-              : Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    bottom: 20,
-                    right: 20,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.siteInformation,
-                              style:
-                                  FluentTheme.of(context).typography.bodyLarge,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Expanded(
-                              child: SiteInformation(),
-                            ),
-                            const FluentHorizontalSeparator(),
-                            const Expanded(
-                              child: SitePhotos(),
-                            ),
-                          ],
-                        ),
+              : context.select<SiteScreenVM, bool>((prov) => prov.error)
+                  ? const SizedBox(
+                      child: Center(
+                        child: ErrorIndicator(),
                       ),
-                      const FluentVerticalSeparator(),
-                      Expanded(
-                        child: Column(
-                          children: const [
-                            Expanded(
-                              flex: 2,
-                              child: SelectionMap(),
-                            ),
-                            CoordinatesRow(),
-                            SizedBox(
-                              height: 100,
-                            ),
-                            SiteCreationRow(),
-                          ],
-                        ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        bottom: 20,
+                        right: 20,
                       ),
-                    ],
-                  ),
-                ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.siteInformation,
+                                  style: FluentTheme.of(context)
+                                      .typography
+                                      .bodyLarge,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Expanded(
+                                  child: SiteInformation(),
+                                ),
+                                const FluentHorizontalSeparator(),
+                                const Expanded(
+                                  child: SitePhotos(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const FluentVerticalSeparator(),
+                          Expanded(
+                            child: Column(
+                              children: const [
+                                Expanded(
+                                  flex: 2,
+                                  child: SelectionMap(),
+                                ),
+                                CoordinatesRow(),
+                                SizedBox(
+                                  height: 100,
+                                ),
+                                SiteCreationRow(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
         ),
       );
 }
@@ -434,7 +441,7 @@ class SiteInformation extends StatelessWidget {
                       placeholder: textProvider.enterNumber,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return textProvider.enterNumber;
+                          return textProvider.enterDataError;
                         }
                         return null;
                       },
@@ -445,7 +452,7 @@ class SiteInformation extends StatelessWidget {
                       placeholder: textProvider.enterName,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return textProvider.enterNumber;
+                          return textProvider.enterDataError;
                         }
                         return null;
                       },
@@ -456,7 +463,7 @@ class SiteInformation extends StatelessWidget {
                       placeholder: textProvider.enterLocation,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return textProvider.enterLocation;
+                          return textProvider.enterDataError;
                         }
                         return null;
                       },
@@ -475,7 +482,7 @@ class SiteInformation extends StatelessWidget {
               maxLines: 20,
               validator: (text) {
                 if (text == null || text.isEmpty) {
-                  return textProvider.enterDescription;
+                  return textProvider.enterDataError;
                 }
                 return null;
               },

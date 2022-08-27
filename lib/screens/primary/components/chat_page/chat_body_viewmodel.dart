@@ -2,6 +2,7 @@ import 'package:firedart/firestore/models.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../app/locator.dart';
+import '../../../../data/api_response.dart';
 import '../../../../data/models/app_user.dart';
 import '../../../../data/models/chat_room.dart';
 import '../../../../data/models/message.dart';
@@ -20,13 +21,22 @@ class ChatPageVM extends ChangeNotifier {
   List<ChatMessage> get messages => _messages.reversed.toList();
 
   Future<void> loadRoom(String id) async {
-    selectedRoom = await _firebase.fetchRoom(id);
-    _messages = await _firebase.fetchMessages(id);
+    final roomResponse = await _firebase.fetchRoom(id);
+    if (roomResponse.success) {
+      selectedRoom = roomResponse.data;
+      final messagesResponse = await _firebase.fetchMessages(id);
+      if (messagesResponse.success) {
+        _messages = messagesResponse.data;
+      } else {
+        selectedRoom = null;
+      }
+    }
+
     animationKey = ValueKey(DateTime.now().millisecondsSinceEpoch);
     notifyListeners();
   }
 
-  Future<List<ChatRoom>> get rooms => _firebase.fetchRooms();
+  Future<ApiResponse<List<ChatRoom>>> get rooms => _firebase.fetchRooms();
 
   Map<String, AppUser> chatUsers = {};
 
