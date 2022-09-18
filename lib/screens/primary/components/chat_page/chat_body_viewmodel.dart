@@ -20,6 +20,26 @@ class ChatPageVM extends ChangeNotifier {
   List<ChatMessage> _messages = [];
   List<ChatMessage> get messages => _messages.reversed.toList();
 
+  bool deleteLoading = false;
+
+  Future<void> deleteMessage(String id) async {
+    deleteLoading = true;
+    notifyListeners();
+
+    await Future.delayed(const Duration(seconds: 3));
+
+    final success = await _firebase.deleteMessage(
+      selectedRoom?.siteId ?? '',
+      id,
+    );
+    if (success) {
+      _messages.removeWhere((element) => element.uid == id);
+    }
+
+    deleteLoading = false;
+    notifyListeners();
+  }
+
   Future<void> loadRoom(String id) async {
     final roomResponse = await _firebase.fetchRoom(id);
     if (roomResponse.success) {

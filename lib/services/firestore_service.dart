@@ -114,6 +114,26 @@ class FirestoreService {
     return success;
   }
 
+  Future<bool> deleteMessage(
+    String siteId,
+    String uid,
+  ) async {
+    bool success = false;
+    try {
+      await _db
+          .collection('rooms')
+          .document(siteId)
+          .collection('messages')
+          .document(uid)
+          .delete();
+
+      success = true;
+    } catch (e) {
+      log('fetchUser$e');
+    }
+    return success;
+  }
+
   Future<ApiResponse<ChatRoom>> fetchRoom(String siteId) async {
     bool success = false;
     ChatRoom? room;
@@ -157,7 +177,8 @@ class FirestoreService {
           .document(siteId)
           .collection('messages')
           .get();
-      messages = docs.map((e) => ChatMessage.fromJson(e.map)).toList();
+      messages =
+          docs.map((e) => ChatMessage.fromJson(e.map)..uid = e.id).toList();
       success = true;
     } catch (e) {
       log('fetchUser$e');

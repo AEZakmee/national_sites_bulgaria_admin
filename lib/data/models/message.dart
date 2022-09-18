@@ -12,6 +12,7 @@ class ChatMessage {
   DocumentReference userReference;
   String message;
   DateTime sendTime;
+  late String uid;
 
   ChatMessage({
     required this.userId,
