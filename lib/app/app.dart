@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     final themeProvider = context.watch<ThemeProvider>();
     return FluentApp(
       debugShowCheckedModeBanner: false,
+      title: 'Опознай България - админ панел',
       theme: themeProvider.lightTheme(),
       darkTheme: themeProvider.darkTheme(),
       themeMode: themeProvider.themeMode,
